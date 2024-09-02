@@ -29,6 +29,7 @@ env:
 jobs:
   # Build job
   build:
+    if: ${{ github.repository != 'DustinAlandzes/aws-lambda-react-github-pages-template'}}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -93,6 +94,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: ${{ github.repository != 'DustinAlandzes/aws-lambda-react-github-pages-template'}}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
