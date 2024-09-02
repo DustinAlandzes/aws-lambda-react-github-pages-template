@@ -3,7 +3,7 @@ on:
   workflow_run:
     workflows: [ PythonTest ]
     branches:
-      - master
+      - main
     types:
       - completed
     # Allows you to run this workflow manually from the Actions tab
