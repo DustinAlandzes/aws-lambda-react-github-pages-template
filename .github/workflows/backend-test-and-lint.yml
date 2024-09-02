@@ -1,0 +1,29 @@
+name: PythonTest
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend/contact_form_lambda
+    steps:
+    - uses: actions/checkout@v4
+      name: Checkout source code
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+    - run: pip install -r requirements.txt
+    - uses: chartboost/ruff-action@v1
+    - name: Run Tests
+      run: python -m pytest

@@ -1,0 +1,39 @@
+name: DeployBackend
+on:
+  workflow_run:
+    workflows: [ PythonTest ]
+    branches:
+      - master
+    types:
+      - completed
+
+
+defaults:
+  run:
+    working-directory: ./backend/contact_form_lambda
+
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install Dependencies
+        run: 'pip install -r requirements.txt -t ./package  --platform manylinux2014_x86_64 --only-binary=:all:'
+      - name: Archive the lambda function code and dependencies
+        run: cp main.py package/main.py && cd package && zip -r ../deployment_package.zip . && cd ..
+      - name: Push code to lambda
+        run: aws lambda update-function-code --function-name ${{ vars.AWS_LAMBDA_FUNCTION_ARN }} --zip-file fileb://deployment_package.zip
