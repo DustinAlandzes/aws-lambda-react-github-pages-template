@@ -2,7 +2,8 @@
 
 This repository contains a frontend and backend along with a Github Actions workflow that deploys them to AWS Lambda and Github Pages.
 
-It was made to be used with this Terraform module to quickly start a project using Python, AWS Lambda, TypeScript, React and GitHub Pages. 
+It was made to be used with this Terraform module to quickly start a project using Python, AWS Lambda, TypeScript, React and GitHub Pages:
+* https://github.com/DustinAlandzes/terraform-aws-github-pages-lambda
 
 ## Usage
 https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
